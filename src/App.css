@@ -1,0 +1,11 @@
+.app {
+  min-height: 100vh;
+  padding: 20px;
+  background: #f2f4f7;
+}
+
+.app h1 {
+  text-align: center;
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 20px 0;
+}
