@@ -34,8 +34,8 @@ function FeedbackForm() {
     return null;
   };
 
-  const validateEmail = (value) => {
-    if (!wantsReply && !value.trim()) return null;
+  const validateEmail = (value, replyRequired = wantsReply) => {
+    if (!replyRequired && !value.trim()) return null;
     if (!value.trim()) return "Email обязателен для заполнения";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
       return "Некорректный формат email";
@@ -66,6 +66,7 @@ function FeedbackForm() {
   };
 
   const formatPhone = (value) => {
+    if (!value) return "";
     const digits = value.replace(/\D/g, "").replace(/^8/, "7").replace(/^7/, "");
 
     let result = "+7";
@@ -148,13 +149,14 @@ function FeedbackForm() {
     if (touched.email) {
       setErrors((prev) => ({
         ...prev,
-        email: value ? validateEmail(email) : null
+        email: validateEmail(email, value)
       }));
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     const newErrors = {
       name: validateName(name),
@@ -238,7 +240,7 @@ function FeedbackForm() {
   }
 
   return (
-    <form className="feedback-form" onSubmit={handleSubmit}>
+    <form className="feedback-form" onSubmit={handleSubmit} noValidate>
       <div className="field">
         <label htmlFor="name" className="field__label">
           Имя
